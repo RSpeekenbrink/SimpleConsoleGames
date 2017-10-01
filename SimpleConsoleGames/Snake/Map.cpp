@@ -15,6 +15,7 @@ bool Map::Draw()
 	#else
 		std::system("clear");
 	#endif
+		
 
 		for (int i(0); i < this->height; i++) {
 			for (int j(0); j < this->width; j++) {
@@ -27,7 +28,20 @@ bool Map::Draw()
 				else if (j == fruit->x && i == fruit->y)
 					std::cout << "@";
 				else
+				{ 
+					bool handled = false;
+					for(short int k(0); k < player->lenght; k++)
+					{
+						if (j == player->tailX[k] && i == player->tailY[k])
+						{
+							std::cout << "o";
+							handled = true;
+							break;
+						}
+					};
+					if(!handled)
 					std::cout << " ";
+				}
 
 				if (j == (this->width - 1))
 					std::cout << std::endl;

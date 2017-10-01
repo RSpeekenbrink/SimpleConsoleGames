@@ -10,7 +10,7 @@
 #include "Map.h"
 #include "Snake.h"
 
-bool gameOver;
+bool gameOver, won;
 unsigned int delMil(100);
 int score;
 Snake player;
@@ -31,12 +31,27 @@ int main() {
 
 		if (player.x == fruit.x && player.y == fruit.y) {
 			fruit.resetLoc((map.width - 1), (map.height - 1));
+			player.lenght++;
 			score++;
+			if (score == 100)
+			{
+				won = true;
+				gameOver = true;
+			}
 		}
 
 		if (player.x == 0 || player.x == map.width || player.y == 0 || player.y == map.height) 
 		{
 			gameOver = true;
+		}
+
+		for (short int i = 0; i < player.lenght; i++)
+		{
+			if (player.x == player.tailX[i] && player.y == player.tailY[i])
+			{
+				gameOver = true;
+				break;
+			}
 		}
 
 		#ifdef _WIN32 //Control Speedy CPU's
@@ -45,7 +60,10 @@ int main() {
 				usleep(delMil * 1000);
 		#endif
 	}
-	std::cout << std::endl << "Game Over! Score: " << score << std::endl;
+	if(won)
+		std::cout << std::endl << "You Won! Score: " << score << std::endl;
+	else
+		std::cout << std::endl << "Game Over! Score: " << score << std::endl;
 	std::system("pause");
 
 	return 0;
@@ -53,6 +71,8 @@ int main() {
 
 void Setup() {
 	gameOver = false;
+	won = false;
+	player = Snake();
 	player.x = map.width / 2;
 	player.y = map.height / 2;
 	fruit.resetLoc((map.width - 1), (map.height - 1));
